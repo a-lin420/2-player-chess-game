@@ -4,11 +4,12 @@ import java.util.ArrayList;
 public class Pawn extends Piece {
 
     public Pawn (Cell loc, Color c) {
-        this.loc = loc;
         this.teamColour = c;
         this.unmoved = true;
+        this.setLocation(loc);
     }
 
+    @Override
     public void setFeatures () {
         this.features = new ArrayList<Polygon>();
         Polygon ear1 = new Polygon();
@@ -29,5 +30,30 @@ public class Pawn extends Piece {
         this.features.add(ear1);
         this.features.add(ear2);
         this.features.add(face);
+    }
+
+    @Override
+    public ArrayList<Cell> setMoves() {
+        ArrayList<Cell> moves = new ArrayList<>();
+        Cell c = loc; // overlay for piece's current Cell location
+        moves.add(c);
+        
+        if (teamColour == Color.WHITE) {
+            c = new Cell(new Point (loc.x, loc.y + Cell.size));
+        } else {
+            c = new Cell(new Point (loc.x, loc.y - Cell.size));
+        }
+        moves.add(c);
+
+        if (unmoved) {
+            if (teamColour == Color.WHITE) {
+                c = new Cell(new Point (loc.x, loc.y + Cell.size * 2));
+            } else {
+                c = new Cell(new Point (loc.x, loc.y - Cell.size * 2));
+            }
+            moves.add(c);
+        }
+
+        return moves;
     }
 }
