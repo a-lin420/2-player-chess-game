@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Bishop extends Piece {
     public Bishop (Cell loc, Color c) {
-        this.loc = loc;
+        this.setLocation(loc);
         this.teamColour = c;
     }
 
@@ -27,5 +27,42 @@ public class Bishop extends Piece {
         this.features.add(ear1);
         this.features.add(ear2);
         this.features.add(face);
+    }
+
+    @Override
+    public ArrayList<Cell> setMoves() {
+        ArrayList<Cell> moves = new ArrayList<>();
+        Cell c = loc;
+        moves.add(c);
+
+        int next = Cell.size;
+        for (int i = 0; i < 3; i++) {
+            c = new Cell(new Point (loc.x + next, loc.y + next)); // bottom-right diagonal
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        next = Cell.size;
+        for (int i = 0; i < 3; i++) {
+            c = new Cell(new Point (loc.x - next, loc.y + next)); // bottom-right diagonal
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        next = Cell.size;
+        for (int i = 0; i < 3; i++) {
+            c = new Cell(new Point (loc.x + next, loc.y - next)); // bottom-right diagonal
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        next = Cell.size;
+        for (int i = 0; i < 3; i++) {
+            c = new Cell(new Point (loc.x - next, loc.y - next)); // bottom-right diagonal
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        return moves;
     }
 }
