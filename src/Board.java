@@ -41,9 +41,10 @@ public class Board {
 
                 for (Piece p : pieces) {
                     if (p.loc.contains(x, y) && p.teamColour == Color.WHITE) {
-                        pieceInAction = Optional.of(p);
+                        pieceInAction = Optional.of(p); // store selected piece if present
 
-                        setPossibleMoves(p);
+                        // return a list of all possible moves for the selected piece
+                        cellOverlay = p.setMoves(); 
 
                         System.out.println(pieceInAction.get());
                         currentState = State.P1_SelectingNewLocation;
@@ -76,7 +77,7 @@ public class Board {
                         pieceInAction = Optional.of(p);
                         System.out.println(pieceInAction.get());
 
-                        setPossibleMoves(p);
+                        cellOverlay = p.setMoves();
 
                         currentState = State.P2_SelectingNewLocation;
                     }
@@ -101,54 +102,6 @@ public class Board {
 
     public void addPiece (Piece p) {
         pieces.add(p);
-    }
-
-    public void setPossibleMoves (Piece p) {
-        // store whichever Cell (and its location) the piece is currently on
-        Point clickedPiecePosition = p.loc.getLocation();
-        Cell c = p.loc; 
-        cellOverlay.add(c);
-
-        // if piece is a Pawn
-        if (p.getClass() == Pawn.class) {
-            if (p.teamColour == Color.WHITE) {
-                c = new Cell(new Point (clickedPiecePosition.x, clickedPiecePosition.y + 75));
-            } else {
-                c = new Cell(new Point (clickedPiecePosition.x, clickedPiecePosition.y - 75));
-            }
-            cellOverlay.add(c);
-
-            if (p.unmoved) {
-                if (p.teamColour == Color.WHITE) {
-                    c = new Cell(new Point (clickedPiecePosition.x, clickedPiecePosition.y + 75 * 2));
-                } else {
-                    c = new Cell(new Point (clickedPiecePosition.x, clickedPiecePosition.y - 75 * 2));
-                }
-                cellOverlay.add(c);
-            }
-        }
-
-        // if piece is a King
-        /* NOTE : Need to restrict overlays for only the cells within the grid*/
-        if (p.getClass() == King.class) {
-            c = new Cell(new Point (clickedPiecePosition.x, clickedPiecePosition.y + 75));
-            cellOverlay.add(c);
-            c = new Cell(new Point (clickedPiecePosition.x, clickedPiecePosition.y - 75));
-            cellOverlay.add(c);
-            c = new Cell(new Point (clickedPiecePosition.x + 75, clickedPiecePosition.y));
-            cellOverlay.add(c);
-            c = new Cell(new Point (clickedPiecePosition.x - 75, clickedPiecePosition.y));
-            cellOverlay.add(c);
-            c = new Cell(new Point (clickedPiecePosition.x + 75, clickedPiecePosition.y + 75));
-            cellOverlay.add(c);
-            c = new Cell(new Point (clickedPiecePosition.x - 75, clickedPiecePosition.y + 75));
-            cellOverlay.add(c);
-            c = new Cell(new Point (clickedPiecePosition.x + 75, clickedPiecePosition.y - 75));
-            cellOverlay.add(c);
-            c = new Cell(new Point (clickedPiecePosition.x - 75, clickedPiecePosition.y - 75));
-            cellOverlay.add(c);
-        }
-
     }
 
     public void setBoardPieces () {
