@@ -8,6 +8,7 @@ public abstract class Piece {
     Boolean unmoved;
 
     public abstract void setFeatures ();
+    public abstract ArrayList<Cell> setMoves ();
 
     public void paint (Graphics g) {
         this.setFeatures();
