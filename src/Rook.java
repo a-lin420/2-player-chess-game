@@ -3,10 +3,11 @@ import java.util.ArrayList;
 
 public class Rook extends Piece {
     public Rook (Cell loc, Color c) {
-        this.loc = loc;
+        this.setLocation(loc);
         this.teamColour = c;
     }
 
+    @Override
     public void setFeatures () {
         this.features = new ArrayList<Polygon>();
         Polygon ear1 = new Polygon();
@@ -27,5 +28,42 @@ public class Rook extends Piece {
         this.features.add(ear1);
         this.features.add(ear2);
         this.features.add(face);
+    }
+
+    @Override
+    public ArrayList<Cell> setMoves() {
+        ArrayList<Cell> moves = new ArrayList<>();
+        Cell c = loc;
+        moves.add(c);
+
+        int next = Cell.size;
+        for (int i = 0; i < 7; i++) {
+            c = new Cell(new Point (loc.x, loc.y + next)); // bottom
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        next = Cell.size;
+        for (int i = 0; i < 7; i++) {
+            c = new Cell(new Point (loc.x, loc.y - next)); // top
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        next = Cell.size;
+        for (int i = 0; i < 7; i++) {
+            c = new Cell(new Point (loc.x + next, loc.y)); // right
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        next = Cell.size;
+        for (int i = 0; i < 7; i++) {
+            c = new Cell(new Point (loc.x - next, loc.y)); // left
+            moves.add(c);
+            next += Cell.size;
+        }
+
+        return moves;
     }
 }
