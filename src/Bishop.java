@@ -35,32 +35,32 @@ public class Bishop extends Piece {
         Cell c = loc;
         moves.add(c);
 
-        int next = Cell.size;
-        for (int i = 0; i < 3; i++) {
-            c = new Cell(new Point (loc.x + next, loc.y + next)); // bottom-right diagonal
+        int nextInc = Cell.size;
+        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + nextInc, loc.y + nextInc)); // fill SE
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
 
-        next = Cell.size;
-        for (int i = 0; i < 3; i++) {
-            c = new Cell(new Point (loc.x - next, loc.y + next)); // bottom-right diagonal
+        nextInc = Cell.size;
+        while ((loc.x - nextInc) >= 0 && (loc.y + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x - nextInc, loc.y + nextInc)); // fill SW
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
 
-        next = Cell.size;
-        for (int i = 0; i < 3; i++) {
-            c = new Cell(new Point (loc.x + next, loc.y - next)); // bottom-right diagonal
+        nextInc = Cell.size;
+        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x + nextInc, loc.y - nextInc)); // fill NE
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
 
-        next = Cell.size;
-        for (int i = 0; i < 3; i++) {
-            c = new Cell(new Point (loc.x - next, loc.y - next)); // bottom-right diagonal
+        nextInc = Cell.size;
+        while ((loc.x - nextInc) >= 0 && (loc.y - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x - nextInc, loc.y - nextInc)); // fill NW
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
 
         return moves;
