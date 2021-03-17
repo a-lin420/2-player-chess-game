@@ -23,22 +23,38 @@ public class King extends Piece {
         Cell c = loc;
         moves.add(c);
 
-        c = new Cell(new Point (loc.x, loc.y + Cell.size)); // top
-        moves.add(c);
-        c = new Cell(new Point (loc.x, loc.y - Cell.size)); // bottom
-        moves.add(c);
-        c = new Cell(new Point (loc.x + Cell.size, loc.y)); // right
-        moves.add(c);
-        c = new Cell(new Point (loc.x - Cell.size, loc.y)); // left
-        moves.add(c);
-        c = new Cell(new Point (loc.x + Cell.size, loc.y + Cell.size)); // top-right
-        moves.add(c);
-        c = new Cell(new Point (loc.x - Cell.size, loc.y + Cell.size)); // top-left
-        moves.add(c);
-        c = new Cell(new Point (loc.x + Cell.size, loc.y - Cell.size)); // bottom-right
-        moves.add(c);
-        c = new Cell(new Point (loc.x - Cell.size, loc.y - Cell.size)); // bottom-left
-        moves.add(c);
+        if (loc.y + Cell.size < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x, loc.y + Cell.size)); // S
+            moves.add(c);
+        }
+        if (loc.y - Cell.size >= 0) {
+            c = new Cell(new Point (loc.x, loc.y - Cell.size)); // N
+            moves.add(c);
+        }
+        if (loc.x + Cell.size < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + Cell.size, loc.y)); // E
+            moves.add(c);
+        }
+        if (loc.x - Cell.size >= 0) {   
+            c = new Cell(new Point (loc.x - Cell.size, loc.y)); // W
+            moves.add(c);
+        }
+        if (loc.y + Cell.size < Grid.gridSpan && loc.x + Cell.size < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + Cell.size, loc.y + Cell.size)); // SE
+            moves.add(c);
+        }
+        if (loc.y + Cell.size < Grid.gridSpan && loc.x - Cell.size >= 0) {
+            c = new Cell(new Point (loc.x - Cell.size, loc.y + Cell.size)); // SW
+            moves.add(c);
+        }
+        if (loc.y - Cell.size >= 0 && loc.x + Cell.size < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + Cell.size, loc.y - Cell.size)); // NE
+            moves.add(c);
+        }
+        if (loc.y - Cell.size >= 0 && loc.x - Cell.size >= 0) {
+            c = new Cell(new Point (loc.x - Cell.size, loc.y - Cell.size)); // NW
+            moves.add(c);
+        }
 
         return moves;
     }
