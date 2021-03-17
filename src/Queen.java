@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Queen extends Piece {
     public Queen (Cell loc, Color c) {
-        this.loc = loc;
+        this.setLocation(loc);
         this.teamColour = c;
     }
 
@@ -27,5 +27,67 @@ public class Queen extends Piece {
         this.features.add(ear1);
         this.features.add(ear2);
         this.features.add(face);
+    }
+
+    @Override
+    public ArrayList<Cell> setMoves() {
+        ArrayList<Cell> moves = new ArrayList<>();
+        Cell c = loc;
+        moves.add(c);
+
+        int nextInc = Cell.size;
+        while ((loc.y - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x, loc.y - nextInc)); // fill N
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+        nextInc = Cell.size;
+        while ((loc.y + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x, loc.y + nextInc)); // fill S
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+        nextInc = Cell.size;
+        while ((loc.x + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + nextInc, loc.y)); // fill E 
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+        nextInc = Cell.size;
+        while ((loc.x - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x - nextInc, loc.y)); // fill W
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+
+        nextInc = Cell.size;
+        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + nextInc, loc.y + nextInc)); // fill SE
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+
+        nextInc = Cell.size;
+        while ((loc.x - nextInc) >= 0 && (loc.y + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x - nextInc, loc.y + nextInc)); // fill SW
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+
+        nextInc = Cell.size;
+        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x + nextInc, loc.y - nextInc)); // fill NE
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+
+        nextInc = Cell.size;
+        while ((loc.x - nextInc) >= 0 && (loc.y - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x - nextInc, loc.y - nextInc)); // fill NW
+            moves.add(c);
+            nextInc += Cell.size;
+        }
+
+        return moves;
     }
 }
