@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Knight extends Piece {
     public Knight (Cell loc, Color c) {
-        this.loc = loc;
+        this.setLocation(loc);
         this.teamColour = c;
     }
 
@@ -28,4 +28,47 @@ public class Knight extends Piece {
         this.features.add(ear2);
         this.features.add(face);
     }
+
+    @Override
+    public ArrayList<Cell> setMoves() {
+        ArrayList<Cell> moves = new ArrayList<>();
+        Cell c = loc;
+        moves.add(c);
+
+        if ((loc.x + Cell.size * 2) < Grid.gridSpan && (loc.y + Cell.size) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + Cell.size * 2, loc.y + Cell.size));
+            moves.add(c);
+        }
+        if ((loc.x + Cell.size * 2) < Grid.gridSpan && (loc.y - Cell.size) >= 0) {
+            c = new Cell(new Point (loc.x + Cell.size * 2, loc.y - Cell.size));
+            moves.add(c);
+        }
+        if ((loc.x + Cell.size) < Grid.gridSpan && (loc.y + Cell.size * 2) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + Cell.size, loc.y + Cell.size * 2));
+            moves.add(c);
+        }
+        if ((loc.x + Cell.size) < Grid.gridSpan && (loc.y - Cell.size * 2) >= 0) {
+            c = new Cell(new Point (loc.x + Cell.size, loc.y - Cell.size * 2));
+            moves.add(c);
+        }
+        if ((loc.x - Cell.size * 2) >= 0 && (loc.y + Cell.size) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x - Cell.size * 2, loc.y + Cell.size));
+            moves.add(c);
+        }
+        if ((loc.x - Cell.size * 2) >= 0 && (loc.y - Cell.size) >= 0) {
+            c = new Cell(new Point (loc.x - Cell.size * 2, loc.y - Cell.size));
+            moves.add(c);
+        }
+        if ((loc.x - Cell.size) >= 0 && (loc.y + Cell.size * 2) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x - Cell.size, loc.y + Cell.size * 2));
+            moves.add(c);
+        }
+        if ((loc.x - Cell.size) >= 0 && (loc.y - Cell.size * 2) >= 0) {
+            c = new Cell(new Point (loc.x - Cell.size, loc.y - Cell.size * 2));
+            moves.add(c);
+        }
+
+        return moves;
+    }
+
 }
