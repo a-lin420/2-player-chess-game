@@ -36,32 +36,29 @@ public class Rook extends Piece {
         Cell c = loc;
         moves.add(c);
 
-        int next = Cell.size;
-        for (int i = 0; i < 7; i++) {
-            c = new Cell(new Point (loc.x, loc.y + next)); // bottom
+        int nextInc = Cell.size;
+        while ((loc.y - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x, loc.y - nextInc)); // fill N
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
-
-        next = Cell.size;
-        for (int i = 0; i < 7; i++) {
-            c = new Cell(new Point (loc.x, loc.y - next)); // top
+        nextInc = Cell.size;
+        while ((loc.y + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x, loc.y + nextInc)); // fill S
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
-
-        next = Cell.size;
-        for (int i = 0; i < 7; i++) {
-            c = new Cell(new Point (loc.x + next, loc.y)); // right
+        nextInc = Cell.size;
+        while ((loc.x + nextInc) < Grid.gridSpan) {
+            c = new Cell(new Point (loc.x + nextInc, loc.y)); // fill E 
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
-
-        next = Cell.size;
-        for (int i = 0; i < 7; i++) {
-            c = new Cell(new Point (loc.x - next, loc.y)); // left
+        nextInc = Cell.size;
+        while ((loc.x - nextInc) >= 0) {
+            c = new Cell(new Point (loc.x - nextInc, loc.y)); // fill W
             moves.add(c);
-            next += Cell.size;
+            nextInc += Cell.size;
         }
 
         return moves;
