@@ -30,41 +30,49 @@ public class Knight extends Piece {
     }
 
     @Override
-    public ArrayList<Cell> setMoves() {
+    public ArrayList<Cell> setMoves(ArrayList<Cell> occupied) {
         ArrayList<Cell> moves = new ArrayList<>();
         Cell c = loc;
         moves.add(c);
 
-        if ((loc.x + Cell.size * 2) < Grid.gridSpan && (loc.y + Cell.size) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x + Cell.size * 2, loc.y + Cell.size));
+        Point pt = new Point(loc.x + Cell.size * 2, loc.y + Cell.size);
+        if (pt.getX() < Grid.gridSpan && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
-        if ((loc.x + Cell.size * 2) < Grid.gridSpan && (loc.y - Cell.size) >= 0) {
-            c = new Cell(new Point (loc.x + Cell.size * 2, loc.y - Cell.size));
+        pt = new Point(loc.x + Cell.size * 2, loc.y - Cell.size);
+        if (pt.getX() < Grid.gridSpan && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
-        if ((loc.x + Cell.size) < Grid.gridSpan && (loc.y + Cell.size * 2) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x + Cell.size, loc.y + Cell.size * 2));
+        pt = new Point(loc.x + Cell.size, loc.y + Cell.size * 2);
+        if (pt.getX() < Grid.gridSpan && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
-        if ((loc.x + Cell.size) < Grid.gridSpan && (loc.y - Cell.size * 2) >= 0) {
-            c = new Cell(new Point (loc.x + Cell.size, loc.y - Cell.size * 2));
+        pt = new Point(loc.x + Cell.size, loc.y - Cell.size * 2);
+        if (pt.getX() < Grid.gridSpan && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
-        if ((loc.x - Cell.size * 2) >= 0 && (loc.y + Cell.size) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x - Cell.size * 2, loc.y + Cell.size));
+        pt = new Point (loc.x - Cell.size * 2, loc.y + Cell.size);
+        if (pt.getX() >= 0 && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
-        if ((loc.x - Cell.size * 2) >= 0 && (loc.y - Cell.size) >= 0) {
-            c = new Cell(new Point (loc.x - Cell.size * 2, loc.y - Cell.size));
+        pt = new Point (loc.x - Cell.size * 2, loc.y - Cell.size);
+        if (pt.getX() >= 0 && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
-        if ((loc.x - Cell.size) >= 0 && (loc.y + Cell.size * 2) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x - Cell.size, loc.y + Cell.size * 2));
+        pt = new Point (loc.x - Cell.size, loc.y + Cell.size * 2);
+        if (pt.getX() >= 0 && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
-        if ((loc.x - Cell.size) >= 0 && (loc.y - Cell.size * 2) >= 0) {
-            c = new Cell(new Point (loc.x - Cell.size, loc.y - Cell.size * 2));
+        pt = new Point (loc.x - Cell.size, loc.y - Cell.size * 2);
+        if (pt.getX() >= 0 && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt);
             moves.add(c);
         }
 
