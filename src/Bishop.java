@@ -30,37 +30,45 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public ArrayList<Cell> setMoves() {
+    public ArrayList<Cell> setMoves(ArrayList<Cell> occupied) {
         ArrayList<Cell> moves = new ArrayList<>();
         Cell c = loc;
-        moves.add(c);
+        moves.add(c); // add Cell location of piece
 
-        int nextInc = Cell.size;
-        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y + nextInc) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x + nextInc, loc.y + nextInc)); // fill SE
+        Point pt = new Point(new Point (loc.x + Cell.size, loc.y + Cell.size));
+        while (pt.getX() < Grid.gridSpan && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill SE
             moves.add(c);
-            nextInc += Cell.size;
+            // increment x and y of pt
+            pt.x += Cell.size;
+            pt.y += Cell.size;
         }
 
-        nextInc = Cell.size;
-        while ((loc.x - nextInc) >= 0 && (loc.y + nextInc) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x - nextInc, loc.y + nextInc)); // fill SW
+        pt = new Point(new Point (loc.x - Cell.size, loc.y + Cell.size));
+        while (pt.getX() >= 0 && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill SW
             moves.add(c);
-            nextInc += Cell.size;
+            // decrement x and increment y of pt
+            pt.x -= Cell.size;
+            pt.y += Cell.size;
         }
 
-        nextInc = Cell.size;
-        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y - nextInc) >= 0) {
-            c = new Cell(new Point (loc.x + nextInc, loc.y - nextInc)); // fill NE
+        pt = new Point(new Point (loc.x + Cell.size, loc.y - Cell.size));
+        while (pt.getX() < Grid.gridSpan && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill NE
             moves.add(c);
-            nextInc += Cell.size;
+            // increment x and decrement y of pt
+            pt.x += Cell.size;
+            pt.y -= Cell.size;
         }
 
-        nextInc = Cell.size;
-        while ((loc.x - nextInc) >= 0 && (loc.y - nextInc) >= 0) {
-            c = new Cell(new Point (loc.x - nextInc, loc.y - nextInc)); // fill NW
+        pt = new Point(new Point (loc.x - Cell.size, loc.y - Cell.size));
+        while (pt.getX() >= 0 && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill NW
             moves.add(c);
-            nextInc += Cell.size;
+            // decrement x and y of pt
+            pt.x -= Cell.size;
+            pt.y -= Cell.size;
         }
 
         return moves;
