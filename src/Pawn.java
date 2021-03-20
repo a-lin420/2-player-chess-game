@@ -33,27 +33,48 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public ArrayList<Cell> setMoves() {
+    public ArrayList<Cell> setMoves(ArrayList<Cell> occupied) {
         ArrayList<Cell> moves = new ArrayList<>();
         Cell c = loc; // overlay for piece's current Cell location
         moves.add(c);
         
         if (teamColour == Color.WHITE) {
-            c = new Cell(new Point (loc.x, loc.y + Cell.size));
-        } else {
-            c = new Cell(new Point (loc.x, loc.y - Cell.size));
-        }
-        moves.add(c);
+            Cell cell = new Cell(new Point(loc.x, loc.y + Cell.size));
+            if (this.withinGridBounds() && !occupied.contains(cell)) { 
+                c = cell;
+                moves.add(c);
 
-        if (unmoved) {
-            if (teamColour == Color.WHITE) {
-                c = new Cell(new Point (loc.x, loc.y + Cell.size * 2));
-            } else {
-                c = new Cell(new Point (loc.x, loc.y - Cell.size * 2));
+                if (unmoved) {
+                    cell = new Cell(new Point (loc.x, loc.y + Cell.size * 2));
+                    if (!occupied.contains(cell)) {
+                        c = cell;
+                        moves.add(c);
+                    }
+                }
             }
-            moves.add(c);
+        } else {
+            Cell cell = new Cell(new Point(loc.x, loc.y - Cell.size));
+            if (this.withinGridBounds() && !occupied.contains(cell)) {
+                c = cell;
+                moves.add(c);
+
+                if (unmoved) {
+                    cell = new Cell(new Point (loc.x, loc.y - Cell.size * 2));
+                    if (!occupied.contains(cell)) {
+                        c = cell;
+                        moves.add(c);
+                    }
+                }
+            }
         }
 
         return moves;
+    }
+
+    public Boolean withinGridBounds() {
+        if (loc.y + Cell.size < Grid.gridSpan && loc.y - Cell.size >= 0) {
+            return true;
+        } 
+        return false;
     }
 }
