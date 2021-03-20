@@ -30,62 +30,69 @@ public class Queen extends Piece {
     }
 
     @Override
-    public ArrayList<Cell> setMoves() {
+    public ArrayList<Cell> setMoves(ArrayList<Cell> occupied) {
         ArrayList<Cell> moves = new ArrayList<>();
         Cell c = loc;
         moves.add(c);
 
-        int nextInc = Cell.size;
-        while ((loc.y - nextInc) >= 0) {
-            c = new Cell(new Point (loc.x, loc.y - nextInc)); // fill N
+        // CARDINALS
+        Point pt = new Point (loc.x, loc.y - Cell.size);
+        while (pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill N
             moves.add(c);
-            nextInc += Cell.size;
+            pt.y -= Cell.size; // decrement y
         }
-        nextInc = Cell.size;
-        while ((loc.y + nextInc) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x, loc.y + nextInc)); // fill S
+        pt = new Point (loc.x, loc.y + Cell.size);
+        while (pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill S
             moves.add(c);
-            nextInc += Cell.size;
+            pt.y += Cell.size; // increment y
         }
-        nextInc = Cell.size;
-        while ((loc.x + nextInc) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x + nextInc, loc.y)); // fill E 
+        pt = new Point (loc.x + Cell.size, loc.y);
+        while (pt.getX() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill E 
             moves.add(c);
-            nextInc += Cell.size;
+            pt.x += Cell.size; // increment x
         }
-        nextInc = Cell.size;
-        while ((loc.x - nextInc) >= 0) {
-            c = new Cell(new Point (loc.x - nextInc, loc.y)); // fill W
+        pt = new Point (loc.x - Cell.size, loc.y);
+        while (pt.getX() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill W
             moves.add(c);
-            nextInc += Cell.size;
-        }
-
-        nextInc = Cell.size;
-        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y + nextInc) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x + nextInc, loc.y + nextInc)); // fill SE
-            moves.add(c);
-            nextInc += Cell.size;
+            pt.x -= Cell.size; // decrement x
         }
 
-        nextInc = Cell.size;
-        while ((loc.x - nextInc) >= 0 && (loc.y + nextInc) < Grid.gridSpan) {
-            c = new Cell(new Point (loc.x - nextInc, loc.y + nextInc)); // fill SW
+        // INTERCARDINALS
+        pt = new Point(new Point (loc.x + Cell.size, loc.y + Cell.size));
+        while (pt.getX() < Grid.gridSpan && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill SE
             moves.add(c);
-            nextInc += Cell.size;
+            // increment x and y of pt
+            pt.x += Cell.size;
+            pt.y += Cell.size;
         }
-
-        nextInc = Cell.size;
-        while ((loc.x + nextInc) < Grid.gridSpan && (loc.y - nextInc) >= 0) {
-            c = new Cell(new Point (loc.x + nextInc, loc.y - nextInc)); // fill NE
+        pt = new Point(new Point (loc.x - Cell.size, loc.y + Cell.size));
+        while (pt.getX() >= 0 && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill SW
             moves.add(c);
-            nextInc += Cell.size;
+            // decrement x and increment y of pt
+            pt.x -= Cell.size;
+            pt.y += Cell.size;
         }
-
-        nextInc = Cell.size;
-        while ((loc.x - nextInc) >= 0 && (loc.y - nextInc) >= 0) {
-            c = new Cell(new Point (loc.x - nextInc, loc.y - nextInc)); // fill NW
+        pt = new Point(new Point (loc.x + Cell.size, loc.y - Cell.size));
+        while (pt.getX() < Grid.gridSpan && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill NE
             moves.add(c);
-            nextInc += Cell.size;
+            // increment x and decrement y of pt
+            pt.x += Cell.size;
+            pt.y -= Cell.size;
+        }
+        pt = new Point(new Point (loc.x - Cell.size, loc.y - Cell.size));
+        while (pt.getX() >= 0 && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
+            c = new Cell(pt); // fill NW
+            moves.add(c);
+            // decrement x and y of pt
+            pt.x -= Cell.size;
+            pt.y -= Cell.size;
         }
 
         return moves;
