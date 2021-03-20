@@ -6,6 +6,7 @@ public class Board {
     ArrayList<Cell> cellOverlay;
     ArrayList<Piece> pieces;
     Optional<Piece> pieceInAction;
+    ArrayList<Cell> occupied;
 
     enum State { PlayerOneMoving, P1_SelectingNewLocation, 
                  PlayerTwoMoving, P2_SelectingNewLocation }
@@ -18,6 +19,7 @@ public class Board {
         currentState = State.PlayerOneMoving;
 
         setBoardPieces(); // add and display pieces to the chess board
+        occupied = setOccupiedCells();
     }
 
     public void drawBoard (Graphics g, Point mousePos) {
@@ -26,7 +28,7 @@ public class Board {
             p.paint(g);
         }
 
-        grid.paintOverlay(g, cellOverlay, new Color(0f, 0f, 1f, 0.5f));
+        grid.paintOverlay(g, cellOverlay, new Color(0f, 1f, 0.5f, 0.5f));
     }
 
     public void mouseClicked(int x, int y) {
@@ -37,16 +39,15 @@ public class Board {
                 System.out.println(currentState);
 
                 pieceInAction = Optional.empty();
-                System.out.println(pieceInAction);
 
                 for (Piece p : pieces) {
                     if (p.loc.contains(x, y) && p.teamColour == Color.WHITE) {
                         pieceInAction = Optional.of(p); // store selected piece if present
 
-                        // return a list of all possible moves for the selected piece
-                        cellOverlay = p.setMoves(); 
+                        occupied = setOccupiedCells(); // recalculate occupied Cells
+                        cellOverlay = p.setMoves(occupied); // return a list of all possible moves for the selected piece
 
-                        System.out.println(pieceInAction.get());
+                        System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
                         currentState = State.P1_SelectingNewLocation;
                     }
                 }
@@ -70,15 +71,15 @@ public class Board {
                 System.out.println(currentState);
 
                 pieceInAction = Optional.empty();
-                System.out.println(pieceInAction);
 
                 for (Piece p : pieces) {
                     if (p.loc.contains(x, y) && p.teamColour == Color.GRAY) {
                         pieceInAction = Optional.of(p);
-                        System.out.println(pieceInAction.get());
 
-                        cellOverlay = p.setMoves();
+                        occupied = setOccupiedCells(); // recalculate occupied Cells
+                        cellOverlay = p.setMoves(occupied); // return a list of all possible moves for the selected piece
 
+                        System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
                         currentState = State.P2_SelectingNewLocation;
                     }
                 }
@@ -98,6 +99,15 @@ public class Board {
                 }
                 break;
         }
+    }
+
+    public Boolean cellIsOccupied (Cell c) {
+        for (Piece pc : pieces) {
+            if ((pc.loc).equals(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addPiece (Piece p) {
@@ -151,6 +161,18 @@ public class Board {
         Rook blackRook2 = new Rook (this.grid.cells[7][7], Color.GRAY);
         this.addPiece(blackRook1);
         this.addPiece(blackRook2);
+    }
+
+    public ArrayList<Cell> setOccupiedCells () {
+        ArrayList<Cell> occupiedCells = new ArrayList<>();
+        for (int i = 0; i < grid.cells.length; i++) {
+            for (int j = 0; j < grid.cells[i].length; j++) {
+                if (cellIsOccupied(grid.cells[i][j])) {
+                    occupiedCells.add(grid.cells[i][j]);
+                }
+            }
+        }
+        return occupiedCells;
     }
 
 }
