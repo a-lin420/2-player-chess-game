@@ -31,4 +31,12 @@ public class Cell extends Rectangle {
             return false;
         }
     }
+
+    
+    public Boolean withinGridBounds() {
+        if (getX() >= 0 && getX() < Grid.gridSpan && getY() >= 0 && getY() < Grid.gridSpan) {
+            return true;
+        } 
+        return false;
+    }
 }

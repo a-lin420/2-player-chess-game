@@ -5,6 +5,9 @@ public class Rook extends Piece {
     public Rook (Cell loc, Color c) {
         this.setLocation(loc);
         this.teamColour = c;
+
+        moves = new ArrayList<>();
+        offensiveMoves = new ArrayList<>();
     }
 
     @Override
@@ -31,36 +34,62 @@ public class Rook extends Piece {
     }
 
     @Override
-    public ArrayList<Cell> setMoves(ArrayList<Cell> occupied) {
-        ArrayList<Cell> moves = new ArrayList<>();
-        Cell c = loc;
-        moves.add(c);
+    public void setMoves(ArrayList<Cell> occupied, ArrayList<Piece> pieces) {
+        Cell cell = loc;
+        moves.add(cell);
 
-        Point pt = new Point (loc.x, loc.y - Cell.size);
-        while (pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill N
-            moves.add(c);
-            pt.y -= Cell.size; // decrement y
+        cell = new Cell(new Point(loc.x, loc.y - Cell.size)); // fill N
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
+            cell = new Cell(new Point(cell.x, cell.y - Cell.size)); // decrement y
         }
-        pt = new Point (loc.x, loc.y + Cell.size);
-        while (pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill S
-            moves.add(c);
-            pt.y += Cell.size; // increment y
-        }
-        pt = new Point (loc.x + Cell.size, loc.y);
-        while (pt.getX() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill E 
-            moves.add(c);
-            pt.x += Cell.size; // increment x
-        }
-        pt = new Point (loc.x - Cell.size, loc.y);
-        while (pt.getX() >= 0 && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill W
-            moves.add(c);
-            pt.x -= Cell.size; // decrement x
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                // if an enemy piece is occupying the cell
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
         }
 
-        return moves;
+        cell = new Cell(new Point (loc.x, loc.y + Cell.size)); // fill S
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
+            cell = new Cell(new Point(cell.x, cell.y + Cell.size)); // increment y
+        }
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
+        }
+
+        cell = new Cell(new Point (loc.x + Cell.size, loc.y)); // fill E
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
+            cell = new Cell(new Point(cell.x + Cell.size, cell.y)); // increment x
+        }
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
+        }
+
+        cell = new Cell(new Point (loc.x - Cell.size, loc.y)); // fill E
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
+            cell = new Cell(new Point(cell.x - Cell.size, cell.y)); // increment x
+        }
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
+        }
     }
+
 }

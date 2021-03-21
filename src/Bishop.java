@@ -2,9 +2,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Bishop extends Piece {
-    public Bishop (Cell loc, Color c) {
+    public Bishop (Cell loc, Color cell) {
         this.setLocation(loc);
-        this.teamColour = c;
+        this.teamColour = cell;
+
+        moves = new ArrayList<>();
+        offensiveMoves = new ArrayList<>();
     }
 
     public void setFeatures () {
@@ -30,47 +33,69 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public ArrayList<Cell> setMoves(ArrayList<Cell> occupied) {
-        ArrayList<Cell> moves = new ArrayList<>();
-        Cell c = loc;
-        moves.add(c); // add Cell location of piece
+    public void setMoves(ArrayList<Cell> occupied, ArrayList<Piece> pieces) {
+        moves = new ArrayList<>();
+        offensiveMoves = new ArrayList<>();
 
-        Point pt = new Point(new Point (loc.x + Cell.size, loc.y + Cell.size));
-        while (pt.getX() < Grid.gridSpan && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill SE
-            moves.add(c);
-            // increment x and y of pt
-            pt.x += Cell.size;
-            pt.y += Cell.size;
+        Cell cell = loc;
+        moves.add(cell); // add Cell location of piece
+
+        cell = new Cell(new Point(loc.x + Cell.size, loc.y + Cell.size)); // fill SE
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
+            // increment x and y of cell
+            cell = new Cell(new Point(cell.x + Cell.size, cell.y + Cell.size));
+        }
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                // if an enemy piece is occupying the cell
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
         }
 
-        pt = new Point(new Point (loc.x - Cell.size, loc.y + Cell.size));
-        while (pt.getX() >= 0 && pt.getY() < Grid.gridSpan && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill SW
-            moves.add(c);
+        cell = new Cell(new Point (loc.x - Cell.size, loc.y + Cell.size)); // fill SW
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
+            // decrement x and increment y
+            cell = new Cell(new Point(cell.x - Cell.size, cell.y + Cell.size));
+        }
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
+        }
+
+        cell = new Cell(new Point (loc.x + Cell.size, loc.y - Cell.size)); // fill NE
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
+            // increment x and decrement y
+            cell = new Cell(new Point(cell.x + Cell.size, cell.y - Cell.size));
+        }
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
+        }
+
+        cell = new Cell(new Point (loc.x - Cell.size, loc.y - Cell.size)); // fill NW
+        while (cell.withinGridBounds() && !occupied.contains(cell)) {
+            moves.add(cell);
             // decrement x and increment y of pt
-            pt.x -= Cell.size;
-            pt.y += Cell.size;
+            cell = new Cell(new Point(cell.x - Cell.size, cell.y - Cell.size));
         }
-
-        pt = new Point(new Point (loc.x + Cell.size, loc.y - Cell.size));
-        while (pt.getX() < Grid.gridSpan && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill NE
-            moves.add(c);
-            // increment x and decrement y of pt
-            pt.x += Cell.size;
-            pt.y -= Cell.size;
+        if (cell.withinGridBounds() && occupied.contains(cell)) {
+            for (Piece p : pieces) {
+                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                    offensiveMoves.add(cell);
+                }
+            }
         }
-
-        pt = new Point(new Point (loc.x - Cell.size, loc.y - Cell.size));
-        while (pt.getX() >= 0 && pt.getY() >= 0 && !occupied.contains(new Cell(pt))) {
-            c = new Cell(pt); // fill NW
-            moves.add(c);
-            // decrement x and y of pt
-            pt.x -= Cell.size;
-            pt.y -= Cell.size;
-        }
-
-        return moves;
     }
+
 }

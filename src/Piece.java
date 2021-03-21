@@ -1,21 +1,24 @@
 import java.util.ArrayList;
 import java.awt.*;
 
-public abstract class Piece {
+public abstract class Piece implements Move {
     Cell loc;
     Color teamColour;
     ArrayList<Polygon> features;
     Boolean unmoved;
 
+    ArrayList<Cell> moves;
+    ArrayList<Cell> offensiveMoves;
+
     public abstract void setFeatures ();
-    public abstract ArrayList<Cell> setMoves ();
+    public abstract void setMoves (ArrayList<Cell> occupied, ArrayList<Piece> pieces);
 
     public void paint (Graphics g) {
         this.setFeatures();
         for (Polygon f: features) {
             g.setColor(teamColour);
             g.fillPolygon(f);
-            g.setColor(Color.GRAY);
+            g.setColor(Color.BLACK);
             g.drawPolygon(f);
         }
     }
