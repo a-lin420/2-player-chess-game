@@ -54,6 +54,9 @@ public class Board {
                         cellOverlay = p.moves; 
                         offensiveOverlay = p.offensiveMoves;
 
+                        p.moves = new ArrayList<>();
+                        p.offensiveMoves = new ArrayList<>();
+
                         System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
                         currentState = State.P1_SelectingNewLocation;
                     }
@@ -71,7 +74,7 @@ public class Board {
                         pieceInAction.get().unmoved = false; // applications for Pawn, King, and Rook
                         
                         // clear cell overlays
-                        cellOverlay = new ArrayList<Cell>();
+                        cellOverlay = new ArrayList<>();
                         offensiveOverlay = new ArrayList<>();
     
                         currentState = State.PlayerTwoMoving;
@@ -87,7 +90,7 @@ public class Board {
                         pieceInAction.get().setLocation(p1_clicked.get());
 
                         // clear cell overlays
-                        cellOverlay = new ArrayList<Cell>();
+                        cellOverlay = new ArrayList<>();
                         offensiveOverlay = new ArrayList<>();
     
                         currentState = State.PlayerTwoMoving;
@@ -111,6 +114,9 @@ public class Board {
                         cellOverlay = p.moves; 
                         offensiveOverlay = p.offensiveMoves;
 
+                        p.moves = new ArrayList<>();
+                        p.offensiveMoves = new ArrayList<>();
+
                         System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
                         currentState = State.P2_SelectingNewLocation;
                     }
@@ -129,7 +135,7 @@ public class Board {
                         pieceInAction.get().unmoved = false; // applications for Pawn, King, and Rook
 
                         // clear cell overlays
-                        cellOverlay = new ArrayList<Cell>();
+                        cellOverlay = new ArrayList<>();
                         offensiveOverlay = new ArrayList<>();
     
                         currentState = State.PlayerOneMoving;
@@ -145,7 +151,7 @@ public class Board {
                         pieceInAction.get().setLocation(p2_clicked.get());
 
                         // clear cell overlays
-                        cellOverlay = new ArrayList<Cell>();
+                        cellOverlay = new ArrayList<>();
                         offensiveOverlay = new ArrayList<>();
     
                         currentState = State.PlayerOneMoving;

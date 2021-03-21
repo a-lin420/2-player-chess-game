@@ -111,7 +111,7 @@ public class Pawn extends Piece {
                 for (Piece p : pieces) {
                     // check if the piece occupying cell is on the opposing team
                     if ((p.loc).equals(cell) && p.teamColour == Color.WHITE) {
-                        moves.add(cell); // add piece to the list
+                        offensiveMoves.add(cell); // add piece to the list
                         break;
                     }
                 }
@@ -120,7 +120,7 @@ public class Pawn extends Piece {
             if (cell.withinGridBounds() && occupied.contains(cell)) {
                 for (Piece p : pieces) {
                     if ((p.loc).equals(cell) && p.teamColour == Color.WHITE) {
-                        moves.add(cell);
+                        offensiveMoves.add(cell);
                         break;
                     }
                 }
