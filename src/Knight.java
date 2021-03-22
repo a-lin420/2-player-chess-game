@@ -34,94 +34,40 @@ public class Knight extends Piece {
 
     @Override
     public void setMoves(ArrayList<Cell> occupied, ArrayList<Piece> pieces) {
-        Cell cell = loc;
-        moves.add(cell);
+        ArrayList<Cell> temp = new ArrayList<>() {
+            {
+                Cell cell = loc;
+                add(cell);
+                cell = new Cell(new Point(loc.x + Cell.size * 2, loc.y + Cell.size)); // SE1
+                add(cell);
+                cell = new Cell(new Point(loc.x + Cell.size * 2, loc.y - Cell.size)); // NE1
+                add(cell);
+                cell = new Cell(new Point(loc.x + Cell.size, loc.y + Cell.size * 2)); // SE2
+                add(cell);
+                cell = new Cell(new Point(loc.x + Cell.size, loc.y - Cell.size * 2)); // NE2
+                add(cell);
+                cell = new Cell(new Point (loc.x - Cell.size * 2, loc.y + Cell.size)); // SW1
+                add(cell);
+                cell = new Cell(new Point (loc.x - Cell.size * 2, loc.y - Cell.size)); // NW1
+                add(cell);
+                cell = new Cell(new Point (loc.x - Cell.size, loc.y + Cell.size * 2)); // SW2
+                add(cell);
+                cell = new Cell(new Point (loc.x - Cell.size, loc.y - Cell.size * 2)); // NW2
+                add(cell);
+            }
+        };
 
-        cell = new Cell(new Point(loc.x + Cell.size * 2, loc.y + Cell.size)); // SE1
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
-                }
-            }
-        }
-        cell = new Cell(new Point(loc.x + Cell.size * 2, loc.y - Cell.size)); // NE1
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
-                }
-            }
-        }
-        cell = new Cell(new Point(loc.x + Cell.size, loc.y + Cell.size * 2)); // SE2
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
-                }
-            }
-        }
-        cell = new Cell(new Point(loc.x + Cell.size, loc.y - Cell.size * 2)); // NE2
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
-                }
-            }
-        }
-        cell = new Cell(new Point (loc.x - Cell.size * 2, loc.y + Cell.size)); // SW1
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
-                }
-            }
-        }
-        cell = new Cell(new Point (loc.x - Cell.size * 2, loc.y - Cell.size)); // NW1
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
-                }
-            }
-        }
-        cell = new Cell(new Point (loc.x - Cell.size, loc.y + Cell.size * 2)); // SW2
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
-                }
-            }
-        }
-        cell = new Cell(new Point (loc.x - Cell.size, loc.y - Cell.size * 2)); // NW2
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        } else if (cell.withinGridBounds() && occupied.contains(cell)) {
-            for (Piece p : pieces) {
-                if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
-                    offensiveMoves.add(cell);
-                    break;
+        for (Cell cell : temp) {
+            if (cell.withinGridBounds()) {
+                if (!occupied.contains(cell)) {
+                    moves.add(cell);
+                } else {
+                    for (Piece p : pieces) {
+                        if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                            offensiveMoves.add(cell);
+                            break;
+                        }
+                    }
                 }
             }
         }
