@@ -34,8 +34,6 @@ public class Bishop extends Piece {
 
     @Override
     public void setMoves(ArrayList<Cell> occupied, ArrayList<Piece> pieces) {
-        moves = new ArrayList<>();
-        offensiveMoves = new ArrayList<>();
 
         Cell cell = loc;
         moves.add(cell); // add Cell location of piece

@@ -58,44 +58,50 @@ public class King extends Piece {
 
     @Override
     public void setMoves(ArrayList<Cell> occupied, ArrayList<Piece> pieces) {
-        Cell cell = loc;
-        moves.add(cell);
+        Cell piecePos = loc;
+        moves.add(piecePos);
 
-        // CARDINALS
-        cell = new Cell(new Point(loc.x, loc.y + Cell.size)); // S
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        }
-        cell = new Cell(new Point(loc.x, loc.y - Cell.size)); // N
-        if (cell.getY() >= 0 && !occupied.contains(cell)) {
-            moves.add(cell);
-        }
-        cell = new Cell(new Point(loc.x + Cell.size, loc.y)); // E
-        if (cell.getX() < Grid.gridSpan && !occupied.contains(cell)) {
-            moves.add(cell);
-        }
-        cell = new Cell(new Point(loc.x - Cell.size, loc.y)); // W
-        if (cell.getX() >= 0 && !occupied.contains(cell)) {   
-            moves.add(cell);
+        ArrayList<Cell> temp = new ArrayList<>() {
+            {
+                Cell cell;
+                
+                // CARDINALS
+                cell = new Cell(new Point(loc.x, loc.y + Cell.size)); // S
+                add(cell);
+                cell = new Cell(new Point(loc.x, loc.y - Cell.size)); // N
+                add(cell);
+                cell = new Cell(new Point(loc.x + Cell.size, loc.y)); // E
+                add(cell);
+                cell = new Cell(new Point(loc.x - Cell.size, loc.y)); // W
+                add(cell);
+
+                // INTERCARDINALS
+                cell = new Cell(new Point (loc.x + Cell.size, loc.y + Cell.size)); // SE
+                add(cell);
+                cell = new Cell(new Point(loc.x - Cell.size, loc.y + Cell.size)); // SW
+                add(cell);
+                cell = new Cell(new Point(loc.x + Cell.size, loc.y - Cell.size)); // NE
+                add(cell);
+                cell = new Cell(new Point(loc.x - Cell.size, loc.y - Cell.size)); // NW
+                add(cell);
+            }
+        };
+
+        for (Cell cell : temp) {
+            if (cell.withinGridBounds()) {
+                if (!occupied.contains(cell)) {
+                    moves.add(cell);
+                } else {
+                    for (Piece p : pieces) {
+                        if (p.loc.equals(cell) && p.teamColour != this.teamColour) {
+                            offensiveMoves.add(cell);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
-        // INTERCARDINALS
-        cell = new Cell(new Point(new Point (loc.x + Cell.size, loc.y + Cell.size))); // SE
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        }
-        cell = new Cell(new Point(new Point (loc.x - Cell.size, loc.y + Cell.size))); // SW
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        }
-        cell = new Cell(new Point(new Point (loc.x + Cell.size, loc.y - Cell.size))); // NE
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        }
-        cell = new Cell(new Point(new Point (loc.x - Cell.size, loc.y - Cell.size))); // NW
-        if (cell.withinGridBounds() && !occupied.contains(cell)) {
-            moves.add(cell);
-        }
     }
 
 }

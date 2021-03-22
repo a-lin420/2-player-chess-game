@@ -34,10 +34,13 @@ public class Knight extends Piece {
 
     @Override
     public void setMoves(ArrayList<Cell> occupied, ArrayList<Piece> pieces) {
+        Cell piecePos = loc;
+        moves.add(piecePos);
+
         ArrayList<Cell> temp = new ArrayList<>() {
             {
-                Cell cell = loc;
-                add(cell);
+                Cell cell;
+                
                 cell = new Cell(new Point(loc.x + Cell.size * 2, loc.y + Cell.size)); // SE1
                 add(cell);
                 cell = new Cell(new Point(loc.x + Cell.size * 2, loc.y - Cell.size)); // NE1
