@@ -2,16 +2,13 @@ import java.util.ArrayList;
 import java.awt.*;
 
 public abstract class Piece implements Move {
-    Cell loc;
-    Color teamColour;
-    ArrayList<Polygon> features;
-    Boolean unmoved;
+    protected Cell loc;
+    protected Color teamColour;
+    protected Boolean unmoved;
+    protected ArrayList<Polygon> features;
 
     ArrayList<Cell> moves;
     ArrayList<Cell> offensiveMoves;
-
-    public abstract void setFeatures ();
-    public abstract void setMoves (ArrayList<Cell> occupied, ArrayList<Piece> pieces);
 
     public void paint (Graphics g) {
         this.setFeatures();
@@ -23,9 +20,20 @@ public abstract class Piece implements Move {
         }
     }
 
+    public Color getTeamColour() {
+        return this.teamColour;
+    }
+
+    public Cell getLocation() {
+        return this.loc;
+    }
+
     public void setLocation (Cell loc) {
         this.loc = loc;
         setFeatures();
     }
+
+    public abstract void setFeatures ();
+    public abstract void setMoves (ArrayList<Cell> occupied, ArrayList<Piece> pieces);
 
 }

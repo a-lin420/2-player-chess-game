@@ -5,7 +5,8 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class Grid implements Iterable<Cell> {
-    Cell[][] cells = new Cell[8][8];
+    public Cell[][] cells = new Cell[8][8];
+    public static final int gridSpan = Cell.size * 8;
 
     public Grid (Point p) {
         for (int i = 0; i < cells.length; i++) {

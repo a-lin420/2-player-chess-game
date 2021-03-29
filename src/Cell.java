@@ -1,8 +1,8 @@
 import java.awt.*;
 
 public class Cell extends Rectangle {
-    Color colour;
-    static int size = 75;
+    public Color colour;
+    public static int size = 75;
 
     public Cell (Point p) {
         super(p, new Dimension(size, size));
