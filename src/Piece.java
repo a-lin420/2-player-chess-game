@@ -7,8 +7,8 @@ public abstract class Piece implements Move {
     protected Boolean unmoved;
     protected ArrayList<Polygon> features;
 
-    ArrayList<Cell> moves;
-    ArrayList<Cell> offensiveMoves;
+    public ArrayList<Cell> moves;
+    public ArrayList<Cell> offensiveMoves;
 
     public void paint (Graphics g) {
         this.setFeatures();

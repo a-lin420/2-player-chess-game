@@ -86,7 +86,7 @@ public class King extends Piece {
                 add(cell);
             }
         };
-
+        
         for (Cell cell : temp) {
             if (cell.withinGridBounds()) {
                 if (!occupied.contains(cell)) {
@@ -101,7 +101,6 @@ public class King extends Piece {
                 }
             }
         }
-
     }
 
 }

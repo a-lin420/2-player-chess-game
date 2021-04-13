@@ -40,133 +40,150 @@ public class Board {
         switch (currentState) {
             case PlayerOneMoving : 
                 System.out.println(currentState);
+                
+                setPieceInAction(x, y, Color.WHITE);
+                System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
+                
+                // identify occupied Cells
+                occupied = setOccupiedCells(); 
+                pieceInAction.get().setMoves(occupied, pieces);
+                
+                setPieceMovesOverlay(pieceInAction.get());
+                clearPieceMoves();
 
-                pieceInAction = Optional.empty();
-
-                for (Piece p : pieces) {
-                    if (p.loc.contains(x, y) && p.teamColour == Color.WHITE) {
-                        pieceInAction = Optional.of(p); // store selected piece if present
-
-                        occupied = setOccupiedCells(); // recalculate occupied Cells
-
-                        p.setMoves(occupied, pieces);
-                        // return a list of all possible moves for the selected piece
-                        cellOverlay = p.moves; 
-                        offensiveOverlay = p.offensiveMoves;
-
-                        p.moves = new ArrayList<>();
-                        p.offensiveMoves = new ArrayList<>();
-
-                        System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
-                        currentState = State.P1_SelectingNewLocation;
-                    }
-                }
+                currentState = State.P1_SelectingNewLocation;
                 break;
 
             case P1_SelectingNewLocation : 
                 System.out.println(currentState);
 
-                Optional<Cell> p1_clicked = grid.cellAtPoint(new Point(x, y));
+                Optional<Cell> p1_clickedLoc = grid.cellAtPoint(new Point(x, y));
                                 
-                if (pieceInAction.isPresent() && p1_clicked.isPresent()) {
-                    if (cellOverlay.contains(p1_clicked.get())) {
-                        pieceInAction.get().setLocation(p1_clicked.get()); 
+                if (pieceInAction.isPresent() && p1_clickedLoc.isPresent()) {
+                    if (cellOverlay.contains(p1_clickedLoc.get())) {
+                        pieceInAction.get().setLocation(p1_clickedLoc.get()); 
                         pieceInAction.get().unmoved = false; // applications for Pawn, King, and Rook
                         
                         // clear cell overlays
-                        cellOverlay = new ArrayList<>();
-                        offensiveOverlay = new ArrayList<>();
-    
+                        clearCellOverlay();
                         currentState = State.PlayerTwoMoving;
                     } 
-                    else if (offensiveOverlay.contains(p1_clicked.get())) {
-                        for (Piece p : pieces) {
-                            if (p.loc.equals(p1_clicked.get())) {
-                                // find enemy piece occupying clicked cell & remove it from the board
-                                pieces.remove(p); 
-                                break;
-                            }
-                        }
-                        pieceInAction.get().setLocation(p1_clicked.get());
+                    else if (offensiveOverlay.contains(p1_clickedLoc.get())) {
+                    	removeEnemyPiece(p1_clickedLoc.get());
+                        pieceInAction.get().setLocation(p1_clickedLoc.get());
 
                         // clear cell overlays
-                        cellOverlay = new ArrayList<>();
-                        offensiveOverlay = new ArrayList<>();
-    
+                        clearCellOverlay();
                         currentState = State.PlayerTwoMoving;
+                    } else {
+                    	pieceInAction = Optional.empty();
+                    	// clear cell overlays
+                        clearCellOverlay();   
+                    	currentState = State.PlayerOneMoving;
                     }
-                }
+                } 
                 break;
 
             case PlayerTwoMoving : 
                 System.out.println(currentState);
 
-                pieceInAction = Optional.empty();
+                setPieceInAction(x, y, Color.GRAY);
+                System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
+                
+                // identify occupied Cells
+                occupied = setOccupiedCells(); 
+                pieceInAction.get().setMoves(occupied, pieces);
+                
+                setPieceMovesOverlay(pieceInAction.get());
+                clearPieceMoves();
 
-                for (Piece p : pieces) {
-                    if (p.loc.contains(x, y) && p.teamColour == Color.GRAY) {
-                        pieceInAction = Optional.of(p);
-
-                        occupied = setOccupiedCells(); // recalculate occupied Cells
-
-                        p.setMoves(occupied, pieces);
-                        // return a list of all possible moves for the selected piece
-                        cellOverlay = p.moves; 
-                        offensiveOverlay = p.offensiveMoves;
-
-                        p.moves = new ArrayList<>();
-                        p.offensiveMoves = new ArrayList<>();
-
-                        System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
-                        currentState = State.P2_SelectingNewLocation;
-                    }
-                    
-                }
+                currentState = State.P2_SelectingNewLocation;
                 break;
 
             case P2_SelectingNewLocation : 
                 System.out.println(currentState);
 
-                Optional<Cell> p2_clicked = grid.cellAtPoint(new Point(x, y));
+                Optional<Cell> p2_clickedLoc = grid.cellAtPoint(new Point(x, y));
                                 
-                if (pieceInAction.isPresent() && p2_clicked.isPresent()) {
-                    if (cellOverlay.contains(p2_clicked.get())) {
-                        pieceInAction.get().setLocation(p2_clicked.get()); 
+                if (pieceInAction.isPresent() && p2_clickedLoc.isPresent()) {
+                    if (cellOverlay.contains(p2_clickedLoc.get())) {
+                        pieceInAction.get().setLocation(p2_clickedLoc.get()); 
                         pieceInAction.get().unmoved = false; // applications for Pawn, King, and Rook
 
                         // clear cell overlays
-                        cellOverlay = new ArrayList<>();
-                        offensiveOverlay = new ArrayList<>();
-    
+                        clearCellOverlay(); 
                         currentState = State.PlayerOneMoving;
                     } 
-                    else if (offensiveOverlay.contains(p2_clicked.get())) {
-                        for (Piece p : pieces) {
-                            // find enemy piece occupying clicked cell & remove it from the board
-                            if (p.loc.equals(p2_clicked.get())) {
-                                pieces.remove(p);
-                                break;
-                            }
-                        }
-                        pieceInAction.get().setLocation(p2_clicked.get());
+                    else if (offensiveOverlay.contains(p2_clickedLoc.get())) {
+                    	removeEnemyPiece(p2_clickedLoc.get());
+                        pieceInAction.get().setLocation(p2_clickedLoc.get());
 
                         // clear cell overlays
-                        cellOverlay = new ArrayList<>();
-                        offensiveOverlay = new ArrayList<>();
-    
+                        clearCellOverlay();
                         currentState = State.PlayerOneMoving;
+                    } else {
+                    	pieceInAction = Optional.empty();
+                    	// clear cell overlays
+                        clearCellOverlay();                        
+                    	currentState = State.PlayerTwoMoving;
                     }
                 }
                 break;
         }
     }
 
-    public void addPiece (Piece p) {
+    private void removeEnemyPiece(Cell clickedLoc) {
+    	for (Piece p : pieces) {
+        
+            // find enemy piece occupying clicked cell & remove it from the board
+            if (p.loc.equals(clickedLoc)) {
+                pieces.remove(p);
+                break;
+            }
+        }
+	}
+
+	private void setPieceMovesOverlay(Piece piece) {
+        cellOverlay = piece.moves; 
+        offensiveOverlay = piece.offensiveMoves;
+	}
+	
+	private void clearCellOverlay() {
+        cellOverlay.clear(); 
+        offensiveOverlay.clear();
+	}
+
+	// set pieceInAction to the clicked Piece (if it exists)
+    private void setPieceInAction(int x, int y, Color c) throws NoSuchElementException {
+        pieceInAction = Optional.empty();
+
+        try {
+            for (Piece p : pieces) {
+                if (((p.loc).contains(x, y)) && (p.teamColour == c)) {
+                	// store selected piece (if present)
+                    pieceInAction = Optional.of(p); 
+                    break; // stop loop since pieceInAction is set
+                }
+            }
+        } catch (NoSuchElementException e) {
+        	System.out.println("Select a valid Piece to move.");
+        }
+
+	}
+    
+    private void clearPieceMoves() {
+        pieceInAction.get().moves = new ArrayList<>();
+        pieceInAction.get().offensiveMoves = new ArrayList<>();
+    }
+
+	// add a Piece to the global list 'pieces'
+	private void addPiece (Piece p) {
         pieces.add(p);
     }
 
-    public void setBoardPieces () {
-        // add pawns when a board is initialised
+	// initialise and set all Pieces on the chessboard
+    private void setBoardPieces () {
+    	// PAWN
         for (int i = 0; i < 8; i++) {
             Pawn whitePawn = new Pawn (this.grid.cells[i][1], Color.WHITE);
             this.addPiece(whitePawn);
@@ -176,16 +193,19 @@ public class Board {
             this.addPiece(blackPawn);
         }
 
+        // KING
         King whiteKing = new King (this.grid.cells[4][0], Color.WHITE);
         this.addPiece(whiteKing);
         King blackKing = new King (this.grid.cells[3][7], Color.GRAY);
         this.addPiece(blackKing);
 
+        // QUEEN
         Queen whiteQueen = new Queen (this.grid.cells[3][0], Color.WHITE);
         this.addPiece(whiteQueen);
         Queen blackQueen = new Queen (this.grid.cells[4][7], Color.GRAY);
         this.addPiece(blackQueen);
 
+        // BISHOP
         Bishop whiteBishop1 = new Bishop(this.grid.cells[1][0], Color.WHITE);
         Bishop whiteBishop2 = new Bishop(this.grid.cells[6][0], Color.WHITE);
         this.addPiece(whiteBishop1);
@@ -195,6 +215,7 @@ public class Board {
         this.addPiece(blackBishop1);
         this.addPiece(blackBishop2);
 
+        // KNIGHT
         Knight whiteKnight1 = new Knight (this.grid.cells[2][0], Color.WHITE);
         Knight whiteKnight2 = new Knight (this.grid.cells[5][0], Color.WHITE);
         this.addPiece(whiteKnight1);
@@ -204,6 +225,7 @@ public class Board {
         this.addPiece(blackKnight1);
         this.addPiece(blackKnight2);
 
+        // ROOK
         Rook whiteRook1 = new Rook (this.grid.cells[0][0], Color.WHITE);
         Rook whiteRook2 = new Rook (this.grid.cells[7][0], Color.WHITE);
         this.addPiece(whiteRook1);
@@ -214,7 +236,9 @@ public class Board {
         this.addPiece(blackRook2);
     }
 
-    public Boolean cellIsOccupied (Cell c) {
+    // return true if a given Cell is occupied by a Piece
+    // otherwise return false
+    private Boolean cellIsOccupied (Cell c) {
         for (Piece pc : pieces) {
             if ((pc.loc).equals(c)) {
                 return true;
@@ -223,8 +247,10 @@ public class Board {
         return false;
     }
 
-    public ArrayList<Cell> setOccupiedCells () {
+    // return a list of Cells that are occupied by a Piece
+    private ArrayList<Cell> setOccupiedCells () {
         ArrayList<Cell> occupiedCells = new ArrayList<>();
+        
         for (int i = 0; i < grid.cells.length; i++) {
             for (int j = 0; j < grid.cells[i].length; j++) {
                 if (cellIsOccupied(grid.cells[i][j])) {
@@ -232,26 +258,47 @@ public class Board {
                 }
             }
         }
-
         return occupiedCells;
     }
+    
+//	private ArrayList<Cell> getEnemyMovesList(Color teamColour) {
+//		ArrayList<Cell> enemyMovesList = new ArrayList<>();
+//		
+//		for (Piece p : pieces) {
+//			// for all enemy pieces(opposite teamColour)
+//			if (!(p.teamColour).equals(teamColour)) {
+//				p.setMoves(occupied, pieces);
+//				p.offensiveMoves.clear();
+//				
+//				System.out.println(p.getClass() + " : " + p.moves);
+//				
+//				for (Cell c : p.moves) {
+//					if (!enemyMovesList.contains(c)) {
+//						enemyMovesList.add(c);
+//					}
+//				}
+//				p.moves.clear();
+//			}
+//		}
+//		
+//		return enemyMovesList;
+//	}
 
-    public Boolean gameOver() {
-        int whiteCount = 0;
-        int blackCount = 0;
-
-        for (Piece p : pieces) {
-            if (p.teamColour == Color.WHITE) {
-                whiteCount++;
-            } else {
-                blackCount++;
-            }
-        }
-
-        if (whiteCount == 0 || blackCount == 0) {
-            return true;
-        }
-        return false;
-    }
-
+//    public Boolean gameOver() {
+//        int whiteCount = 0;
+//        int blackCount = 0;
+//
+//        for (Piece p : pieces) {
+//            if (p.teamColour == Color.WHITE) {
+//                whiteCount++;
+//            } else {
+//                blackCount++;
+//            }
+//        }
+//
+//        if (whiteCount == 0 || blackCount == 0) {
+//            return true;
+//        }
+//        return false;
+//    }
 }
