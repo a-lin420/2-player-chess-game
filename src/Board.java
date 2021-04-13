@@ -40,18 +40,31 @@ public class Board {
         switch (currentState) {
             case PlayerOneMoving : 
                 System.out.println(currentState);
-                
-                setPieceInAction(x, y, Color.WHITE);
-                System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
-                
-                // identify occupied Cells
-                occupied = setOccupiedCells(); 
-                pieceInAction.get().setMoves(occupied, pieces);
-                
-                setPieceMovesOverlay(pieceInAction.get());
-                clearPieceMoves();
 
-                currentState = State.P1_SelectingNewLocation;
+                occupied = setOccupiedCells(); // identify occupied Cells
+                setPieceInAction(x, y, Color.WHITE);
+
+                if (pieceInAction.isPresent()) {
+                    System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
+                    pieceInAction.get().setMoves(occupied, pieces);
+                    
+                    if (pieceInAction.get().getClass() == King.class) {
+                    	ArrayList<Cell> enemyMoves = getEnemyMovesList(pieceInAction.get().teamColour);
+                    	
+//                    	for (Cell c : (pieceInAction.get()).moves) {
+//                    		if (enemyMoves.contains(c)) {
+//                    			pieceInAction.get().moves.remove(c);
+//                    		}
+//                    	}
+                    }
+                    
+                    setPieceMovesOverlay(pieceInAction.get());
+                    clearPieceMoves();
+
+                    currentState = State.P1_SelectingNewLocation;
+                } else {
+                	System.out.println("Select a valid Piece to move.");
+                }
                 break;
 
             case P1_SelectingNewLocation : 
@@ -86,18 +99,31 @@ public class Board {
 
             case PlayerTwoMoving : 
                 System.out.println(currentState);
-
+                
+                occupied = setOccupiedCells(); // identify occupied Cells
                 setPieceInAction(x, y, Color.GRAY);
-                System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
-                
-                // identify occupied Cells
-                occupied = setOccupiedCells(); 
-                pieceInAction.get().setMoves(occupied, pieces);
-                
-                setPieceMovesOverlay(pieceInAction.get());
-                clearPieceMoves();
 
-                currentState = State.P2_SelectingNewLocation;
+                if (pieceInAction.isPresent()) {
+                    System.out.println(pieceInAction.get().getClass() + " : " + pieceInAction.get().loc);
+                    pieceInAction.get().setMoves(occupied, pieces);
+                    
+                    if (pieceInAction.get().getClass() == King.class) {
+                    	ArrayList<Cell> enemyMoves = getEnemyMovesList(pieceInAction.get().teamColour);
+                    	
+//                    	for (Cell c : (pieceInAction.get()).moves) {
+//                    		if (enemyMoves.contains(c)) {
+//                    			pieceInAction.get().moves.remove(c);
+//                    		}
+//                    	}
+                    }
+                    
+                    setPieceMovesOverlay(pieceInAction.get());
+                    clearPieceMoves();
+
+                    currentState = State.P2_SelectingNewLocation;
+                } else {
+                	System.out.println("Select a valid Piece to move.");
+                }
                 break;
 
             case P2_SelectingNewLocation : 
@@ -154,21 +180,16 @@ public class Board {
 	}
 
 	// set pieceInAction to the clicked Piece (if it exists)
-    private void setPieceInAction(int x, int y, Color c) throws NoSuchElementException {
+    private void setPieceInAction(int x, int y, Color c) {
         pieceInAction = Optional.empty();
 
-        try {
-            for (Piece p : pieces) {
-                if (((p.loc).contains(x, y)) && (p.teamColour == c)) {
-                	// store selected piece (if present)
-                    pieceInAction = Optional.of(p); 
-                    break; // stop loop since pieceInAction is set
-                }
+        for (Piece p : pieces) {
+            if (((p.loc).contains(x, y)) && (p.teamColour == c)) {
+            	// store selected piece (if present)
+                pieceInAction = Optional.of(p); 
+                break; // stop loop since pieceInAction is set
             }
-        } catch (NoSuchElementException e) {
-        	System.out.println("Select a valid Piece to move.");
         }
-
 	}
     
     private void clearPieceMoves() {
@@ -261,28 +282,26 @@ public class Board {
         return occupiedCells;
     }
     
-//	private ArrayList<Cell> getEnemyMovesList(Color teamColour) {
-//		ArrayList<Cell> enemyMovesList = new ArrayList<>();
-//		
-//		for (Piece p : pieces) {
-//			// for all enemy pieces(opposite teamColour)
-//			if (!(p.teamColour).equals(teamColour)) {
-//				p.setMoves(occupied, pieces);
-//				p.offensiveMoves.clear();
-//				
-//				System.out.println(p.getClass() + " : " + p.moves);
-//				
-//				for (Cell c : p.moves) {
-//					if (!enemyMovesList.contains(c)) {
-//						enemyMovesList.add(c);
-//					}
-//				}
-//				p.moves.clear();
-//			}
-//		}
-//		
-//		return enemyMovesList;
-//	}
+	private ArrayList<Cell> getEnemyMovesList(Color teamColour) {
+		ArrayList<Cell> enemyMovesList = new ArrayList<>();
+		
+		for (Piece p : pieces) {
+			// for all enemy pieces(opposite teamColour)
+			if (!(p.teamColour).equals(teamColour)) {
+				p.setMoves(occupied, pieces);
+				p.offensiveMoves.clear();
+								
+				for (Cell c : p.moves) {
+					if (!enemyMovesList.contains(c)) {
+						enemyMovesList.add(c);
+					}
+				}
+				p.moves.clear();
+			}
+		}
+		
+		return enemyMovesList;
+	}
 
 //    public Boolean gameOver() {
 //        int whiteCount = 0;
