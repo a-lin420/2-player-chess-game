@@ -72,9 +72,17 @@ public class Board {
 
                 Optional<Cell> p1_clickedLoc = grid.cellAtPoint(new Point(x, y));
                                 
-                if (pieceInAction.isPresent() && p1_clickedLoc.isPresent()) {
+                if (p1_clickedLoc.isPresent()) {
                     if (cellOverlay.contains(p1_clickedLoc.get())) {
-                        pieceInAction.get().setLocation(p1_clickedLoc.get()); 
+                    	// if a Pawn reaches the other end of the board
+                    	if (pieceInAction.get().getClass() == Pawn.class && isAlongTopBottom(p1_clickedLoc.get())) {
+                			// * SUBJECT TO CHANGE * change Pawn to Queen (testing)
+                			pieces.add(new Queen(p1_clickedLoc.get(), pieceInAction.get().teamColour));
+                			pieces.remove(pieces.indexOf(pieceInAction.get()));
+                    	} else {
+                            pieceInAction.get().setLocation(p1_clickedLoc.get()); 
+                    	}
+                    	
                         pieceInAction.get().unmoved = false; // applications for Pawn, King, and Rook
                         
                         // clear cell overlays
@@ -83,8 +91,15 @@ public class Board {
                     } 
                     else if (offensiveOverlay.contains(p1_clickedLoc.get())) {
                     	removeEnemyPiece(p1_clickedLoc.get());
-                        pieceInAction.get().setLocation(p1_clickedLoc.get());
-
+                    	
+                    	// if a Pawn reaches the other end of the board
+                    	if (pieceInAction.get().getClass() == Pawn.class && isAlongTopBottom(p1_clickedLoc.get())) {
+                    		// change Pawn to Queen
+                			pieces.add(new Queen(p1_clickedLoc.get(), pieceInAction.get().teamColour)); 
+                			pieces.remove(pieces.indexOf(pieceInAction.get()));
+                    	} else {
+                            pieceInAction.get().setLocation(p1_clickedLoc.get()); 
+                    	}
                         // clear cell overlays
                         clearCellOverlay();
                         currentState = State.PlayerTwoMoving;
@@ -131,9 +146,17 @@ public class Board {
 
                 Optional<Cell> p2_clickedLoc = grid.cellAtPoint(new Point(x, y));
                                 
-                if (pieceInAction.isPresent() && p2_clickedLoc.isPresent()) {
+                if (p2_clickedLoc.isPresent()) {
                     if (cellOverlay.contains(p2_clickedLoc.get())) {
-                        pieceInAction.get().setLocation(p2_clickedLoc.get()); 
+                    	// if a Pawn reaches the other end of the board
+                    	if (pieceInAction.get().getClass() == Pawn.class && isAlongTopBottom(p2_clickedLoc.get())) {
+                			// * SUBJECT TO CHANGE * change Pawn to Queen (testing)
+                			pieces.add(new Queen(p2_clickedLoc.get(), pieceInAction.get().teamColour)); 
+                			pieces.remove(pieces.indexOf(pieceInAction.get()));
+                    	} else {
+                            pieceInAction.get().setLocation(p2_clickedLoc.get()); 
+                    	}
+                    	
                         pieceInAction.get().unmoved = false; // applications for Pawn, King, and Rook
 
                         // clear cell overlays
@@ -142,8 +165,16 @@ public class Board {
                     } 
                     else if (offensiveOverlay.contains(p2_clickedLoc.get())) {
                     	removeEnemyPiece(p2_clickedLoc.get());
-                        pieceInAction.get().setLocation(p2_clickedLoc.get());
-
+                    	
+                    	// if a Pawn reaches the other end of the board
+                    	if (pieceInAction.get().getClass() == Pawn.class && isAlongTopBottom(p2_clickedLoc.get())) {
+                    		// change Pawn to Queen
+                			pieces.add(new Queen(p2_clickedLoc.get(), pieceInAction.get().teamColour)); 
+                			pieces.remove(pieces.indexOf(pieceInAction.get()));
+                    	} else {
+                            pieceInAction.get().setLocation(p2_clickedLoc.get()); 
+                    	}
+                    	
                         // clear cell overlays
                         clearCellOverlay();
                         currentState = State.PlayerOneMoving;
@@ -206,24 +237,24 @@ public class Board {
     private void setBoardPieces () {
     	// PAWN
         for (int i = 0; i < 8; i++) {
-            Pawn whitePawn = new Pawn (this.grid.cells[i][1], Color.WHITE);
+            Pawn whitePawn = new Pawn(this.grid.cells[i][1], Color.WHITE);
             this.addPiece(whitePawn);
         }
         for (int i = 0; i < 8; i++) {
-            Pawn blackPawn = new Pawn (this.grid.cells[i][6], Color.GRAY);
+            Pawn blackPawn = new Pawn(this.grid.cells[i][6], Color.GRAY);
             this.addPiece(blackPawn);
         }
 
         // KING
-        King whiteKing = new King (this.grid.cells[4][0], Color.WHITE);
+        King whiteKing = new King(this.grid.cells[4][0], Color.WHITE);
         this.addPiece(whiteKing);
-        King blackKing = new King (this.grid.cells[3][7], Color.GRAY);
+        King blackKing = new King(this.grid.cells[3][7], Color.GRAY);
         this.addPiece(blackKing);
 
         // QUEEN
-        Queen whiteQueen = new Queen (this.grid.cells[3][0], Color.WHITE);
+        Queen whiteQueen = new Queen(this.grid.cells[3][0], Color.WHITE);
         this.addPiece(whiteQueen);
-        Queen blackQueen = new Queen (this.grid.cells[4][7], Color.GRAY);
+        Queen blackQueen = new Queen(this.grid.cells[4][7], Color.GRAY);
         this.addPiece(blackQueen);
 
         // BISHOP
@@ -237,29 +268,29 @@ public class Board {
         this.addPiece(blackBishop2);
 
         // KNIGHT
-        Knight whiteKnight1 = new Knight (this.grid.cells[2][0], Color.WHITE);
-        Knight whiteKnight2 = new Knight (this.grid.cells[5][0], Color.WHITE);
+        Knight whiteKnight1 = new Knight(this.grid.cells[2][0], Color.WHITE);
+        Knight whiteKnight2 = new Knight(this.grid.cells[5][0], Color.WHITE);
         this.addPiece(whiteKnight1);
         this.addPiece(whiteKnight2);
-        Knight blackKnight1 = new Knight (this.grid.cells[2][7], Color.GRAY);
-        Knight blackKnight2 = new Knight (this.grid.cells[5][7], Color.GRAY);
+        Knight blackKnight1 = new Knight(this.grid.cells[2][7], Color.GRAY);
+        Knight blackKnight2 = new Knight(this.grid.cells[5][7], Color.GRAY);
         this.addPiece(blackKnight1);
         this.addPiece(blackKnight2);
 
         // ROOK
-        Rook whiteRook1 = new Rook (this.grid.cells[0][0], Color.WHITE);
-        Rook whiteRook2 = new Rook (this.grid.cells[7][0], Color.WHITE);
+        Rook whiteRook1 = new Rook(this.grid.cells[0][0], Color.WHITE);
+        Rook whiteRook2 = new Rook(this.grid.cells[7][0], Color.WHITE);
         this.addPiece(whiteRook1);
         this.addPiece(whiteRook2);
-        Rook blackRook1 = new Rook (this.grid.cells[0][7], Color.GRAY);
-        Rook blackRook2 = new Rook (this.grid.cells[7][7], Color.GRAY);
+        Rook blackRook1 = new Rook(this.grid.cells[0][7], Color.GRAY);
+        Rook blackRook2 = new Rook(this.grid.cells[7][7], Color.GRAY);
         this.addPiece(blackRook1);
         this.addPiece(blackRook2);
     }
 
     // return true if a given Cell is occupied by a Piece
     // otherwise return false
-    private Boolean cellIsOccupied (Cell c) {
+    private Boolean cellIsOccupied(Cell c) {
         for (Piece pc : pieces) {
             if ((pc.loc).equals(c)) {
                 return true;
@@ -267,9 +298,39 @@ public class Board {
         }
         return false;
     }
+    
+    // return true if a given Cell is along the 
+    private Boolean isAlongTopBottom(Cell c) {
+    	ArrayList<Cell> topBottomCells = new ArrayList<>() {
+    		{
+    			add(grid.cells[0][0]);
+    			add(grid.cells[1][0]);
+    			add(grid.cells[2][0]);
+    			add(grid.cells[3][0]);
+    			add(grid.cells[4][0]);
+    			add(grid.cells[5][0]);
+    			add(grid.cells[6][0]);
+    			add(grid.cells[7][0]);
+
+    			add(grid.cells[0][7]);
+    			add(grid.cells[1][7]);
+    			add(grid.cells[2][7]);
+    			add(grid.cells[3][7]);
+    			add(grid.cells[4][7]);
+    			add(grid.cells[5][7]);
+    			add(grid.cells[6][7]);
+    			add(grid.cells[7][7]);
+    		}
+    	};
+    	
+    	if (topBottomCells.contains(c)) {
+    		return true;
+    	}
+    	return false;
+    }
 
     // return a list of Cells that are occupied by a Piece
-    private ArrayList<Cell> setOccupiedCells () {
+    private ArrayList<Cell> setOccupiedCells() {
         ArrayList<Cell> occupiedCells = new ArrayList<>();
         
         for (int i = 0; i < grid.cells.length; i++) {
